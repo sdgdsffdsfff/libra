@@ -8,6 +8,7 @@ import requests
 
 LOGGER = logging.getLogger(__name__)
 
+
 class CreateContext(object):
     """
     :type node_manager: WeightNodes
