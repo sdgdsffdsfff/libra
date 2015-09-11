@@ -5,7 +5,9 @@ import logging
 import requests
 from requests.exceptions import ConnectionError
 
-LOGGER = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.DEBUG,
+)
 
 
 class CreateContext(object):
@@ -28,12 +30,12 @@ class CreateContext(object):
             try:
                 response = requests.get(url_new, params=parameters, **kwargs)
             except ConnectionError:
-                LOGGER.error('LIBRA: dead node, %s', node)
+                logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue
 
             count += 1
-            LOGGER.debug('LIBRA: release node, %s', node)
+            logging.debug('LIBRA: release node, %s', node)
             self.node_manager.release_node(node)
             return response
 
@@ -48,12 +50,12 @@ class CreateContext(object):
             try:
                 response = requests.post(url_new, data=data, json=json, **kwargs)
             except ConnectionError:
-                LOGGER.error('LIBRA: dead node, %s', node)
+                logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue
 
             count += 1
-            LOGGER.debug('LIBRA: release node, %s', node)
+            logging.debug('LIBRA: release node, %s', node)
             self.node_manager.release_node(node)
             return response
 

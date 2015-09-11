@@ -6,7 +6,9 @@ import urllib2
 import socket
 from urllib2 import URLError, HTTPError
 
-LOGGER = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.DEBUG,
+)
 
 
 class CreateContext(object):
@@ -29,12 +31,12 @@ class CreateContext(object):
                     cafile=cafile, capath=capath, cadefault=cadefault, context=context
                 )
             except (URLError, HTTPError):
-                LOGGER.error('LIBRA: dead node, %s', node)
+                logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue
 
             count += 1
-            LOGGER.debug('LIBRA: release node, %s', node)
+            logging.debug('LIBRA: release node, %s', node)
             self.node_manager.release_node(node)
             return fp
 
