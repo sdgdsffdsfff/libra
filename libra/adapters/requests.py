@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 
+import sys
 import logging
+
 import requests
 from requests.exceptions import ConnectionError
 
@@ -23,7 +25,6 @@ class RequestsContext(requests):
     def get(self, url, parameters=None, **kwargs):
         # 如果请求默认服务器失败就向其他服务器请求，重请求最多三次
         count = 0
-        response = None
         while count < self.RETRIES:
             count += 1
             node = self.node_manager.get_node()
@@ -33,13 +34,18 @@ class RequestsContext(requests):
             except ConnectionError:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
+                exc_info = sys.exc_info()
                 continue
+            except Exception as err:
+                logging.debug('LIBRA: release node, %s', node)
+                self.node_manager.release_node(node)
+                raise err
+            else:
+                logging.debug('LIBRA: release node, %s', node)
+                self.node_manager.release_node(node)
+                return response
 
-            logging.debug('LIBRA: release node, %s', node)
-            self.node_manager.release_node(node)
-            return response
-
-        return response
+        raise exc_info[0], exc_info[1], exc_info[2]
 
     def post(self, url, data=None, json=None, **kwargs):
         count = 0
