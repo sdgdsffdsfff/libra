@@ -30,7 +30,7 @@ class CreateContext(object):
             url_new = url.replace(self.placeholder, node)
             try:
                 response = requests.get(url_new, params=parameters, **kwargs)
-            except ConnectionError:
+            except:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue
@@ -50,7 +50,7 @@ class CreateContext(object):
             url_new = url.replace(self.placeholder, node)
             try:
                 response = requests.post(url_new, data=data, json=json, **kwargs)
-            except ConnectionError:
+            except:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue

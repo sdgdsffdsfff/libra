@@ -31,7 +31,7 @@ class CreateContext(object):
                     url_new, data=data, timeout=timeout,
                     cafile=cafile, capath=capath, cadefault=cadefault, context=context
                 )
-            except (URLError, HTTPError):
+            except:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue
