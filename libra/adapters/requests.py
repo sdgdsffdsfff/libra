@@ -25,6 +25,7 @@ class CreateContext(object):
         count = 0
         response = None
         while count < self.RETRIES:
+            count += 1
             node = self.node_manager.get_node()
             url_new = url.replace(self.placeholder, node)
             try:
@@ -34,7 +35,6 @@ class CreateContext(object):
                 self.node_manager.dead_node(node)
                 continue
 
-            count += 1
             logging.debug('LIBRA: release node, %s', node)
             self.node_manager.release_node(node)
             return response
@@ -45,6 +45,7 @@ class CreateContext(object):
         count = 0
         response = None
         while count < self.RETRIES:
+            count += 1
             node = self.node_manager.get_node()
             url_new = url.replace(self.placeholder, node)
             try:
@@ -54,7 +55,6 @@ class CreateContext(object):
                 self.node_manager.dead_node(node)
                 continue
 
-            count += 1
             logging.debug('LIBRA: release node, %s', node)
             self.node_manager.release_node(node)
             return response
