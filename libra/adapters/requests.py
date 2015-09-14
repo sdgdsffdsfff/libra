@@ -50,7 +50,7 @@ class RequestsContext(requests):
             url_new = url.replace(self.placeholder, node)
             try:
                 response = requests.post(url_new, data=data, json=json, **kwargs)
-            except:
+            except ConnectionError:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue
