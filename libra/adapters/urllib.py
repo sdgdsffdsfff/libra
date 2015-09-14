@@ -1,37 +1,19 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 
-import logging
 import urllib
 
-logging.basicConfig(
-    level=logging.DEBUG,
-)
+from ..tools import auto_switch
 
 
-class UrllibContext(urllib):
-    RETRIES = 4
+class UrllibContext(object):
+    RETRIES = 3
 
     def __init__(self, node_manager, placeholder='__node__'):
         self.node_manager = node_manager
         self.placeholder = placeholder
+        self.error = IOError
 
+    @auto_switch
     def urlopen(self, url, data=None, proxies=None, context=None):
-        count = 0
-        fp = None
-        while count < self.RETRIES:
-            count += 1
-            node = self.node_manager.get_node()
-            url_new = url.replace(self.placeholder, node)
-            try:
-                fp = urllib.urlopen(url_new, data=data, proxies=proxies, context=context)
-            except IOError:
-                logging.error('LIBRA: dead node, %s', node)
-                self.node_manager.dead_node(node)
-                continue
-
-            logging.debug('LIBRA: release node, %s', node)
-            self.node_manager.release_node(node)
-            return fp
-
-        return fp
+        return urllib.urlopen(url, data=data, proxies=proxies, context=context)
