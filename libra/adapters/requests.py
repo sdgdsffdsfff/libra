@@ -10,7 +10,7 @@ logging.basicConfig(
 )
 
 
-class CreateContext(object):
+class RequestsContext(requests):
     """
     :type node_manager: WeightNodes
     """
@@ -30,7 +30,7 @@ class CreateContext(object):
             url_new = url.replace(self.placeholder, node)
             try:
                 response = requests.get(url_new, params=parameters, **kwargs)
-            except:
+            except ConnectionError:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue

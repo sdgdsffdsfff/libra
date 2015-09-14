@@ -9,7 +9,7 @@ logging.basicConfig(
 )
 
 
-class CreateContext(object):
+class UrllibContext(urllib):
     RETRIES = 4
 
     def __init__(self, node_manager, placeholder='__node__'):
@@ -25,7 +25,7 @@ class CreateContext(object):
             url_new = url.replace(self.placeholder, node)
             try:
                 fp = urllib.urlopen(url_new, data=data, proxies=proxies, context=context)
-            except:
+            except IOError:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue

@@ -11,7 +11,7 @@ logging.basicConfig(
 )
 
 
-class CreateContext(object):
+class Urllib2Context(urllib2):
     RETRIES = 4
 
     def __init__(self, node_manager, placeholder='__node__'):
@@ -31,7 +31,7 @@ class CreateContext(object):
                     url_new, data=data, timeout=timeout,
                     cafile=cafile, capath=capath, cadefault=cadefault, context=context
                 )
-            except:
+            except URLError:
                 logging.error('LIBRA: dead node, %s', node)
                 self.node_manager.dead_node(node)
                 continue
