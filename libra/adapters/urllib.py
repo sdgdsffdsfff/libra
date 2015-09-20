@@ -9,10 +9,8 @@ from ..tools import auto_switch
 class UrllibContext(object):
     RETRIES = 3
 
-    def __init__(self, node_manager, placeholder='__node__'):
-        self.node_manager = node_manager
-        self.placeholder = placeholder
-        self.error = IOError
+    def __init__(self, context):
+        self.context = context
 
     @auto_switch
     def urlopen(self, url, data=None, proxies=None, context=None):

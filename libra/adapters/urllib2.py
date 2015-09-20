@@ -12,10 +12,8 @@ class Urllib2Context(object):
     RETRIES = 3
     from urllib2 import URLError
 
-    def __init__(self, node_manager, placeholder='__node__'):
-        self.node_manager = node_manager
-        self.placeholder = placeholder
-        self.error = URLError
+    def __init__(self, context):
+        self.context = context
 
     @auto_switch
     def urlopen(self, url, data=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,

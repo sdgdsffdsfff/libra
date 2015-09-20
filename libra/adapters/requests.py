@@ -14,10 +14,8 @@ class RequestsContext(object):
     RETRIES = 3
     from requests.exceptions import ConnectionError
 
-    def __init__(self, node_manager=None, placeholder='__node__'):
-        self.node_manager = node_manager
-        self.placeholder = placeholder
-        self.error = ConnectionError
+    def __init__(self, context):
+        self.context = context
 
     @auto_switch
     def get(self, url, parameters=None, **kwargs):
